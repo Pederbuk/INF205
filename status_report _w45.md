@@ -1,4 +1,4 @@
-# Status report 45
+# Status report week 45
 
 ## Data structures:
 - class Graph
