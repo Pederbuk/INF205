@@ -1,5 +1,5 @@
 run: run-graph
-	./run-graph kb.dat query.dat
+	./run-graph eks_1.dat query.dat
 
 run-graph: graph.o query.o run-graph.o 
 	g++ -g3 -std=c++17 -o run-graph *.o

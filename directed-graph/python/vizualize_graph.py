@@ -5,8 +5,8 @@ import pandas as pd
 
 file_name = 'directed-graph/eks_1.dat'
 
-G = nx.DiGraph()
 plt.figure("Graph")
+G = nx.DiGraph()
 
 node_labels = {}
 edge_labels = {}
@@ -23,6 +23,6 @@ for line in open(file_name).readlines():
 pos = nx.spring_layout(G)
 
 nx.draw_networkx(G, pos=pos, labels=node_labels, arrows=True, node_color="skyblue")
-nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
 
 plt.show()
