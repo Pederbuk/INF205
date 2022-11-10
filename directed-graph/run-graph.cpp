@@ -18,9 +18,8 @@ int find_instances(char* file, graph::Graph g)
    graph::Query q;
    inquery >> q;
    inquery.close();
-
+   
    g.query(&q, &std::cout); // apply query q to graph g
-   return 0;
 }
 
 int main(int argc, char** argv)
