@@ -3,4 +3,3 @@
 ## Group members:
 - Stein Oskar Hinderaker
 - Peder Ørmen Bukaasen
-
