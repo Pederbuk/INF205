@@ -21,3 +21,4 @@ bool graph::IRI_input(std::string* token, std::istream* source)
    
    return (*token != "");  // format: empty token means that we are done
 }
+ 
