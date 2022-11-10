@@ -1,4 +1,6 @@
-# Status report 1
+# Status report week 43
+
+## Group number 8
 
 ## Group members:
 - Stein Oskar Hinderaker
