@@ -3,6 +3,7 @@
 #include <cassert>
 #include "graph.h"
 
+
 using namespace graph;
 
 // create a new edge in the graph
@@ -291,9 +292,29 @@ void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator q_rel_it
    }
 }
 
-void Graph::check_two_queries(Query* q, Query* p, std::ostream*){
+void Graph::check_two_queries(Query* q, Query* p, std::ostream* out){
+   std::vector<std::string>::iterator q_rel_it = q->relations.begin();
+   *out<<"q \n";
+   for(auto q_iter = this->edges.begin(); q_iter != this->edges.end(); q_iter++)
+   {
+      Edge* e = *q_iter;
+      if (e->get_label() == *q_rel_it)
+      {
+         // *out << "\t\tlabel found:" << *q_rel_it << "\n";
+         e->conditional_dfs(q, q_rel_it, e->get_source_label(), out);
+      }
+   }
+   *out<<"p \n";
 
-   
+   std::vector<std::string>::iterator p_rel_it = p->relations.begin();
+   for (auto p_iter = this->edges.begin(); p_iter != this->edges.end();p_iter++){
+      Edge* e = *p_iter;
+      if (e->get_label()==*p_rel_it){
+         e-> conditional_dfs(p, p_rel_it, e->get_source_label(),out);
+      }
+
+   }
+
 
 }
 
