@@ -138,6 +138,8 @@ namespace graph
       
       // apply query, write to out
       void query(Query* q, std::ostream* out);
+
+      void check_two_queries(Query* q, Query* p, std::ostream* out);
       
    private:
       // for this implementation, node labels are unique, and we identify nodes through their labels

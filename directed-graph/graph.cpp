@@ -270,7 +270,7 @@ void Graph::query(Query* q, std::ostream* out)
 
 void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator q_rel_it, std::string source_label, std::ostream* out)
 {
-   q_rel_it++;
+   q_rel_it++; 
    if(q_rel_it == q->relations.end())
    {
       // solution found!
@@ -290,3 +290,10 @@ void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator q_rel_it
       }
    }
 }
+
+void Graph::check_two_queries(Query* q, Query* p, std::ostream*){
+
+   
+
+}
+
