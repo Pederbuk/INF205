@@ -28,7 +28,7 @@ int find_instances(char* file_q, char* file_p, graph::Graph g)
    inquery_p >> p;
    inquery_p.close();
 
-   g.check_two_queries(&q, &p, &std::cout);
+   g.check_two_queries_by_nodes(&q, &p, &std::cout);
    return 0;
 }
 
@@ -48,4 +48,5 @@ int main(int argc, char** argv)
    // std::cout << "\nContent of graph g:\n" << g << "\n";
 
    find_instances(argv[2], argv[3], g);
+   
 }
