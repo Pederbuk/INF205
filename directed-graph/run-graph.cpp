@@ -28,7 +28,9 @@ int find_instances(char* file_q, char* file_p, graph::Graph g)
    inquery_p >> p;
    inquery_p.close();
 
+
    g.check_two_queries_by_nodes(&q, &p, &std::cout);
+   
    return 0;
 }
 
