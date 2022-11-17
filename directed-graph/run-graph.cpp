@@ -7,27 +7,23 @@
 #include "graph.h"
 #include "query.h"
 
-int find_instances(char* file_q, char* file_p, graph::Graph g)
+int find_instances(char* file_query, graph::Graph g)
 {
-   std::ifstream inquery_q(file_q);
-   if (!inquery_q)
+   std::ifstream inquery(file_query);
+   if (!inquery)
    {
-      std::cerr << "Error! File " << file_q << " cannot be read.\n";
+      std::cerr << "Error! File " << file_query << " cannot be read.\n";
       return EXIT_FAILURE;
    }
    graph::Query q;
-   inquery_q >> q;
-   inquery_q.close();
-   
-   std::ifstream inquery_p(file_p);
-   if(!inquery_p){
-      std::cerr<<"Error! File" <<file_p <<"cannot be read.\n";
-      return EXIT_FAILURE;
-   }
-   graph::Query p;
-   inquery_p >> p;
-   inquery_p.close();
+   inquery >> q;
 
+   std::string s = "";
+   std::getline(inquery, s);
+
+   graph::Query p;
+   inquery >> p;
+   inquery.close();
 
    g.check_two_queries_by_nodes(&q, &p, &std::cout);
    
@@ -49,6 +45,6 @@ int main(int argc, char** argv)
    indata.close();
    // std::cout << "\nContent of graph g:\n" << g << "\n";
 
-   find_instances(argv[2], argv[3], g);
+   find_instances(argv[2], g);
    
 }
