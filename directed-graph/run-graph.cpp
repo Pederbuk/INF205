@@ -46,5 +46,5 @@ int main(int argc, char** argv)
    // std::cout << "\nContent of graph g:\n" << g << "\n";
 
    find_instances(argv[2], g);
-   
+   return 0;
 }

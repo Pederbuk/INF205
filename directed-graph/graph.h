@@ -143,7 +143,7 @@ namespace graph
       // checks two queries by edges
       void check_two_queries_by_edges(Query* q, Query* p, std::ostream* out);
       
-      void check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out);
+      int check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out);
       
    private:
       // for this implementation, node labels are unique, and we identify nodes through their labels

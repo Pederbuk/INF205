@@ -321,7 +321,7 @@ void Graph::check_two_queries_by_edges(Query* q, Query* p, std::ostream* out){
    }
 
 }
-void Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
+int Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string>::iterator p_rel_it = p->relations.begin();
 
@@ -349,19 +349,22 @@ void Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
             p_counter += 1;
             e->conditional_dfs(p, p_rel_it, &p_sol, n.get_label(), out);  
          }
-      }
-      
-      // checks if the same end node exist for both paths 
-      if (q_counter >= 1 && p_counter >= 1){}
-         for (int i = 0; i != q_sol.size(); i++){
-            for (int j = 0; j != p_sol.size(); j++){
-               if (q_sol[i] == p_sol[j]) {
-                  *out << "Solution: "<<n.get_label()<<" --> "<< q_sol[i]<<"\n";
-                  iter = this->nodes.end(); // stops the for loop running though the nodes
-
+         // checks if the same end node exist for both paths 
+         if (q_counter >= 1 && p_counter >= 1){
+            for (int i = 0; i != q_sol.size(); i++){
+               for (int j = 0; j != p_sol.size(); j++){
+                  if (q_sol[i] == p_sol[j]) {
+                     *out << "Solution: "<<n.get_label()<<" --> "<< q_sol[i]<<"\n";
+                     
+                     return 0;
+                  
+                  }
                }
             }
          }
+      
+      }
    }
+   return 1;
                  
 }
