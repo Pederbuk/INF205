@@ -255,19 +255,20 @@ void Node::detach_edge(Edge* e)
       }
 }
 
-void Graph::query(Query* q, std::ostream* out)
+std::vector<std::string> Graph::query(Query *q, std::ostream *out)
 {
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string> solutions;
+
    for(auto iter = this->edges.begin(); iter != this->edges.end(); iter++)
    {
       Edge* e = *iter;
       if(e->get_label() == *q_rel_it)
       {
-         // *out << "\t\tlabel found:" << *q_rel_it << "\n";
-         e->conditional_dfs(q, q_rel_it, &solutions, e->get_source_label(), out);
+         e->conditional_dfs_full(q, q_rel_it, &solutions, e->get_source_label(), out);
       }
    }
+   return solutions;
 }
 
 void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
@@ -277,8 +278,8 @@ void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator rel_it, 
    if(rel_it == q->relations.end())
    {
       // solution found!
-      std::string solution = this->get_target_label();
-      
+      std::string solution = source_label + "-" + this->get_target_label();
+
       sol->push_back(solution);
      
    } 
@@ -289,38 +290,54 @@ void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator rel_it, 
       Edge* e = *step;
       if(e->get_label() == *rel_it)
       {
-         // *out << "\tlabel found:" << *q_rel_it << "\n";
          e->conditional_dfs(q, rel_it, sol, source_label, out);
-         
+      }
+   } 
+   
+}
+
+void Edge::conditional_dfs_full(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
+{
+   rel_it++;
+   int solution_found = 0;
+   if(rel_it == q->relations.end())
+   {
+      // solution found!
+      std::string solution = source_label + "-" + this->get_target_label();
+
+      sol->push_back(solution);
+     
+   } 
+    
+   auto connections = this->target->get_outgoing_edges();
+   for(auto step = connections.begin(); step != connections.end(); step++)
+   {
+      Edge* e = *step;
+      if(e->get_label() == *rel_it)
+      {
+         e->conditional_dfs(q, rel_it, sol, source_label, out);
       }
    } 
    
 }
    
 void Graph::check_two_queries_by_edges(Query* q, Query* p, std::ostream* out){
-   std::vector<std::string>::iterator q_rel_it = q->relations.begin();
-   std::vector<std::string> q_sol;
-   std::vector<std::string> p_sol;
-   *out<<"q \n";
-   for(auto q_iter = this->edges.begin(); q_iter != this->edges.end(); q_iter++)
+   std::vector<std::string> q_sol = this->query(q, out);
+   std::vector<std::string> p_sol = this->query(p, out);
+
+   *out << "Q-solutions:\n";
+   for (int i = 0; i != q_sol.size(); i++)
    {
-      Edge* e = *q_iter;
-      if (e->get_label() == *q_rel_it)
-      {
-         // *out << "\t\tlabel found:" << *q_rel_it << "\n";
-         e->conditional_dfs(q, q_rel_it, &q_sol, e->get_source_label(), out);   
-      }
+      *out << q_sol[i] << "\n";
    }
 
-   std::vector<std::string>::iterator p_rel_it = p->relations.begin();
-   for (auto p_iter = this->edges.begin(); p_iter != this->edges.end();p_iter++){
-      Edge* e = *p_iter;
-      if (e->get_label()==*p_rel_it){
-         e->conditional_dfs(p, p_rel_it, &p_sol, e->get_source_label(),out);
-      }
+   *out << "P-solutions:\n";
+   for (int i = 0; i != p_sol.size(); i++)
+   {
+      *out << p_sol[i] << "\n";
    }
-
 }
+
 int Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string>::iterator p_rel_it = p->relations.begin();

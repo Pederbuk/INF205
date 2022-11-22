@@ -1,9 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 
-file_name = 'directed-graph/eks_1.dat'
+file_name = 'directed-graph/data/eks1.dat'
 
 plt.figure("Graph")
 G = nx.DiGraph()

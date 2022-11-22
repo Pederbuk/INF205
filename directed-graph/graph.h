@@ -73,6 +73,7 @@ namespace graph
       
       // querying DFS helper method
       void conditional_dfs(Query* q, std::vector<std::string>::iterator q_rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out);
+      void conditional_dfs_full(Query* q, std::vector<std::string>::iterator q_rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out);
 
    private:
       std::string label = "";  // the edge label is _not_ a unique identifier! (as opposed to node labels which are unique)
@@ -139,7 +140,7 @@ namespace graph
       Graph& operator=(Graph&& old);
       
       // apply query, write to out
-      void query(Query* q, std::ostream* out);
+      std::vector<std::string> query(Query *q, std::ostream *out);
       // checks two queries by edges
       void check_two_queries_by_edges(Query* q, Query* p, std::ostream* out);
       
