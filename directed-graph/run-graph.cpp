@@ -18,6 +18,7 @@ int find_instances(char* file_query, graph::Graph g)
    graph::Query q;
    inquery >> q;
 
+
    std::string s = "";
    std::getline(inquery, s);
 
