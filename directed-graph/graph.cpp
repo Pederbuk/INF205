@@ -265,13 +265,13 @@ std::vector<std::string> Graph::query(Query *q, std::ostream *out)
       Edge* e = *iter;
       if(e->get_label() == *q_rel_it)
       {
-         e->conditional_dfs_full(q, q_rel_it, &solutions, e->get_source_label(), out);
+         e->conditional_dfs_edge(q, q_rel_it, &solutions, e->get_source_label(), out);
       }
    }
    return solutions;
 }
 
-void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
+void Edge::conditional_dfs_node(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
 {
    rel_it++;
    
@@ -290,16 +290,16 @@ void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator rel_it, 
       Edge* e = *step;
       if(e->get_label() == *rel_it)
       {
-         e->conditional_dfs(q, rel_it, sol, source_label, out);
+         e->conditional_dfs_node(q, rel_it, sol, source_label, out);
       }
    } 
    
 }
 
-void Edge::conditional_dfs_full(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
+void Edge::conditional_dfs_edge(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
 {
    rel_it++;
-   int solution_found = 0;
+   
    if(rel_it == q->relations.end())
    {
       // solution found!
@@ -316,7 +316,7 @@ void Edge::conditional_dfs_full(Query* q, std::vector<std::string>::iterator rel
       
       if(e->get_label() == *rel_it)
       {
-         e->conditional_dfs(q, rel_it, sol, source_label, out);
+         e->conditional_dfs_edge(q, rel_it, sol, source_label, out);
       }
    } 
    
@@ -328,10 +328,10 @@ int Graph::check_two_queries_by_edges(Query* q, Query* p, std::ostream* out){
 
    for (int i = 0; i != q_sol.size(); i++)
    {
-      for (int i = 0; i != p_sol.size(); i++)
+      for (int j = 0; j != p_sol.size(); j++)
       {
-         if (q_sol[i] == p_sol[i]) {
-            *out << "Solution: " << q_sol[i];
+         if (q_sol[i] == p_sol[j]) {
+            *out << "\nSolution: " << q_sol[i];
             return 0;
          }
       }
@@ -361,11 +361,11 @@ int Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
          
          if(e_label == *q_rel_it){
             
-            e->conditional_dfs(q, q_rel_it, &q_sol, n.get_label(), out);
+            e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
             
          }else if(e_label == *p_rel_it){
             
-            e->conditional_dfs(p, p_rel_it, &p_sol, n.get_label(), out);  
+            e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);  
          }
          // checks if the same end node exist for both paths 
          if (q_sol.size() >= 1 && p_sol.size() >= 1){

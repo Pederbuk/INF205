@@ -1,9 +1,3 @@
-#include <typeinfo>
-#include <cassert>
-#include <fstream>
-#include <iostream>
-#include <string>
-
 #include "graph.h"
 #include "query.h"
 
