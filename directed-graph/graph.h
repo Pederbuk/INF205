@@ -141,9 +141,9 @@ namespace graph
       
       // apply query, write to out
       std::vector<std::string> query(Query *q, std::ostream *out);
-      // checks two queries by edges
-      void check_two_queries_by_edges(Query* q, Query* p, std::ostream* out);
       
+      // checks two queries by edges
+      int check_two_queries_by_edges(Query* q, Query* p, std::ostream* out);
       int check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out);
       
    private:

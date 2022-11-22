@@ -278,7 +278,7 @@ void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator rel_it, 
    if(rel_it == q->relations.end())
    {
       // solution found!
-      std::string solution = source_label + "-" + this->get_target_label();
+      std::string solution = this->get_target_label();
 
       sol->push_back(solution);
      
@@ -303,7 +303,7 @@ void Edge::conditional_dfs_full(Query* q, std::vector<std::string>::iterator rel
    if(rel_it == q->relations.end())
    {
       // solution found!
-      std::string solution = source_label + "-" + this->get_target_label();
+      std::string solution = source_label + " --> " + this->get_target_label();
 
       sol->push_back(solution);
       
@@ -322,21 +322,23 @@ void Edge::conditional_dfs_full(Query* q, std::vector<std::string>::iterator rel
    
 }
 
-void Graph::check_two_queries_by_edges(Query* q, Query* p, std::ostream* out){
+int Graph::check_two_queries_by_edges(Query* q, Query* p, std::ostream* out){
    std::vector<std::string> q_sol = this->query(q, out);
    std::vector<std::string> p_sol = this->query(p, out);
 
-   *out << "Q-solutions:\n";
    for (int i = 0; i != q_sol.size(); i++)
    {
-      *out << q_sol[i] << "\n";
+      for (int i = 0; i != p_sol.size(); i++)
+      {
+         if (q_sol[i] == p_sol[i]) {
+            *out << "Solution: " << q_sol[i];
+            return 0;
+         }
+      }
    }
 
-   *out << "P-solutions:\n";
-   for (int i = 0; i != p_sol.size(); i++)
-   {
-      *out << p_sol[i] << "\n";
-   }
+   *out << "No solution found, better luck next time!";
+   return 0;
 }
 
 int Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
