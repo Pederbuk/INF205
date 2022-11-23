@@ -331,7 +331,7 @@ int Graph::check_two_queries_by_edges(Query* q, Query* p, std::ostream* out){
       for (int j = 0; j != p_sol.size(); j++)
       {
          if (q_sol[i] == p_sol[j]) {
-            *out << "Solution: " << q_sol[i] << "\n";
+            // *out << "Solution: " << q_sol[i] << "\n";
             return 0;
          }
       }
@@ -374,7 +374,7 @@ int Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
                for (int j = 0; j != p_sol.size(); j++){
                   // *out<<q_sol[i]<<", "<<p_sol[j]<<"\n";
                   if (q_sol[i] == p_sol[j]) {
-                     *out << "Solution: "<<n.get_label()<<" --> "<< q_sol[i]<<"\n";
+                     // *out << "Solution: "<<n.get_label()<<" --> "<< q_sol[i]<<"\n";
                      return 0;
                   }
                }
