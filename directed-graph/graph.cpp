@@ -369,15 +369,13 @@ int Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
          }
          // checks if the same end node exist for both paths 
          if (q_sol.size() >= 1 && p_sol.size() >= 1){
-            *out<<"Checking solutions\n";
+            // *out<<"Checking solutions\n";
             for (int i = 0; i != q_sol.size(); i++){
                for (int j = 0; j != p_sol.size(); j++){
-                  *out<<q_sol[i]<<", "<<p_sol[j]<<"\n";
+                  // *out<<q_sol[i]<<", "<<p_sol[j]<<"\n";
                   if (q_sol[i] == p_sol[j]) {
                      *out << "Solution: "<<n.get_label()<<" --> "<< q_sol[i]<<"\n";
-                     
                      return 0;
-                  
                   }
                }
             }

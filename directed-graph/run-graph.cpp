@@ -26,7 +26,7 @@ int main(int argc, char** argv)
    // Call the function
    for (int i = 0; i < 1000; i++)
    {
-      g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
+      g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
    }
 
    // Get ending timepoint
