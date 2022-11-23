@@ -10,14 +10,19 @@
 #include "read-input.h"
 using namespace std::chrono;
 
-void time_nodes(auto g, auto paths) {
+auto time_it(auto g, auto paths, std::string algo)
+{
    // Get starting timepoint
    auto start = high_resolution_clock::now();
 
    // Call the function
    for (int i = 0; i < 1000; i++)
-   {
-      std::string result = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
+   {  
+      if (algo == "nodes") {
+         std::string result = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
+      } else {
+         std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
+      }
    }
 
    // Get ending timepoint
@@ -25,26 +30,9 @@ void time_nodes(auto g, auto paths) {
 
    // Print duration
    auto duration = duration_cast<milliseconds>(stop - start);
-   std::cout << "Time taken (nodes): " << duration.count() << " milliseconds" << std::endl;
-}
+   std::cout << algo << ": " << duration.count() << " milliseconds" << std::endl;
 
-
-void time_edges(auto g, auto paths) {
-   // Get starting timepoint
-   auto start = high_resolution_clock::now();
-
-   // Call the function
-   for (int i = 0; i < 1000; i++)
-   {
-      std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
-   }
-
-   // Get ending timepoint
-   auto stop = high_resolution_clock::now();
-
-   // Print duration
-   auto duration = duration_cast<milliseconds>(stop - start);
-   std::cout << "Time taken (edges): " << duration.count() << " milliseconds" << std::endl;
+   return duration.count();
 }
 
 
@@ -58,8 +46,8 @@ int main(int argc, char** argv)
    read_graph(argv, &g);
    read_query(argv, paths);
    
-   time_nodes(g, paths);
-   time_edges(g, paths);
+   time_it(g, paths, "nodes");
+   time_it(g, paths, "edges");
 
    return 0;
 }
