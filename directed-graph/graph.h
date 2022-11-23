@@ -143,9 +143,9 @@ namespace graph
       std::vector<std::string> query(Query *q, std::ostream *out);
       
       // checks two queries by edges
-      int check_two_queries_by_edges(Query* q, Query* p, std::ostream* out);
-      int check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out);
-      
+      std::string check_two_queries_by_edges(Query * q, Query *p, std::ostream *out);
+      std::string check_two_queries_by_nodes(Query *q, Query *p, std::ostream *out);
+
    private:
       // for this implementation, node labels are unique, and we identify nodes through their labels
       // hence it makes sense to use an STL map with the label as the key and the node as the value
