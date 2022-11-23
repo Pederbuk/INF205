@@ -46,8 +46,17 @@ int main(int argc, char** argv)
    read_graph(argv, &g);
    read_query(argv, paths);
    
-   time_it(g, paths, "nodes");
-   time_it(g, paths, "edges");
+   // Write to file
+   std::ofstream file;
+   file.open("data/benchmark.csv");
+   file << "nodes, edges\n";
+
+   for (int i = 0; i < 10; i++)
+   {
+      auto n = time_it(g, paths, "nodes");
+      auto e = time_it(g, paths, "edges");
+      file << n << ", " << e << "\n";
+   }
 
    return 0;
 }
