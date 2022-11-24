@@ -1,11 +1,11 @@
 from random import randint, choices, choice
 
 
-for i in range(5):
+for i in range(1, 11):
     """ Parameters """
     n_nodes = 20 * i
-    n_edges = n_nodes * 5
-    n_edge_labels = 10
+    n_edges = n_nodes
+    n_edge_labels = 5
     query_len = 5
     """ ---------- """
 
@@ -31,14 +31,14 @@ for i in range(5):
 
 
     # Create graph file
-    with open('directed-graph/python/rand_graph.dat', 'w') as file:
+    with open(f'python/b{i}_g.dat', 'w') as file:
         for line in graph:
             file.write(f'<{line[0]}> <{line[1]}> <{line[2]}>\n')
         file.write('<>')
 
 
     # Create query files
-    with open('directed-graph/python/rand_query.dat', 'w') as file:
+    with open(f'python/b{i}_q.dat', 'w') as file:
         for _ in range(query_len):
             file.write(f'<{choice(edge_labels)}> ')
         file.write('<>\n')

@@ -10,13 +10,13 @@
 #include "read-input.h"
 using namespace std::chrono;
 
-auto time_it(auto g, auto paths, std::string algo)
+auto time_it(auto g, auto paths, std::string algo, int runs)
 {
    // Get starting timepoint
    auto start = high_resolution_clock::now();
 
    // Call the function
-   for (int i = 0; i < 1000; i++)
+   for (int i = 0; i < runs; i++)
    {  
       if (algo == "nodes") {
          std::string result = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
@@ -41,7 +41,7 @@ int main()
    graph::Query paths[2];
    graph::Graph g;
    
-   std::string dir = "data/scale_nodes/";
+   std::string dir = "data/no_solution/";
    
    // Create file
    std::ofstream file;
@@ -49,7 +49,7 @@ int main()
    file << "nodes, edges\n";
    
    // Loop files
-   for (int i = 1; i < 6; i++) {
+   for (int i = 1; i < 11; i++) {
       std::string file_g = dir + "b" + std::to_string(i) + "_g.dat";
       std::string file_q = dir + "b" + std::to_string(i) + "_q.dat";
 
@@ -61,16 +61,20 @@ int main()
       int edge_sum = 0;
       int runs = 0;
 
-      for (int j = 0; j < 10; j++)
+      std::cout << "Running: " << file_g << "\n";
+
+      for (int j = 0; j < 5; j++)
       {
-         node_sum += time_it(g, paths, "nodes");
-         edge_sum += time_it(g, paths, "edges");
+         node_sum += time_it(g, paths, "nodes", 1000);
+         edge_sum += time_it(g, paths, "edges", 1000);
          runs++;
       }
 
       file << node_sum/runs << ", " << edge_sum/runs << "\n";
-      std::cout << node_sum / runs << ", " << edge_sum / runs << "\n";
-   }
+
+      std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
+      std::cout << result << "\n";
+      }
 
    return 0;
 }

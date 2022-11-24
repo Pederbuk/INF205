@@ -14,8 +14,9 @@ int main()
    graph::Query paths[2];
    graph::Graph g;
    
-   std::string file_g = "data/scale_nodes/b5_g.dat";
-   std::string file_q = "data/scale_nodes/b5_q.dat";
+   std::string i = "5";
+   std::string file_g = "data/solution/b" + i + "_g.dat";
+   std::string file_q = "data/solution/b" + i + "_q.dat";
 
    read_graph(file_g, &g);
    read_query(file_q, paths);
