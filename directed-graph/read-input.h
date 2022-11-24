@@ -1,12 +1,12 @@
 #include "graph.h"
 #include "query.h"
 
-int read_query(char **argv, graph::Query paths[2])
+int read_query(std::string file_name, graph::Query paths[2])
 {
-   std::ifstream inquery(argv[2]);
+   std::ifstream inquery(file_name);
    if (!inquery)
    {
-      std::cerr << "Error! File " << argv[2] << " cannot be read.\n";
+      std::cerr << "Error! File " << file_name << " cannot be read.\n";
       return EXIT_FAILURE;
    }
    graph::Query q;
@@ -25,12 +25,12 @@ int read_query(char **argv, graph::Query paths[2])
    return 0;
 }
 
-int read_graph(char **argv, graph::Graph* graph)
+int read_graph(std::string file_name, graph::Graph* graph)
 {
-   std::ifstream indata(argv[1]);
+   std::ifstream indata(file_name);
    if(!indata)
    {
-      std::cerr << "Error! File " << argv[1] << " cannot be read.\n";
+      std::cerr << "Error! File " << file_name << " cannot be read.\n";
       return EXIT_FAILURE;
    }
    graph::Graph g;

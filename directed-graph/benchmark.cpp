@@ -30,32 +30,46 @@ auto time_it(auto g, auto paths, std::string algo)
 
    // Print duration
    auto duration = duration_cast<milliseconds>(stop - start);
-   std::cout << algo << ": " << duration.count() << " milliseconds" << std::endl;
+   // std::cout << algo << ": " << duration.count() << " milliseconds" << std::endl;
 
    return duration.count();
 }
 
 
-int main(int argc, char** argv)
+int main()
 {
-   assert(argc >= 3);
-
    graph::Query paths[2];
    graph::Graph g;
    
-   read_graph(argv, &g);
-   read_query(argv, paths);
+   std::string dir = "data/scale_nodes/";
    
-   // Write to file
+   // Create file
    std::ofstream file;
    file.open("data/benchmark.csv");
    file << "nodes, edges\n";
+   
+   // Loop files
+   for (int i = 1; i < 6; i++) {
+      std::string file_g = dir + "b" + std::to_string(i) + "_g.dat";
+      std::string file_q = dir + "b" + std::to_string(i) + "_q.dat";
 
-   for (int i = 0; i < 10; i++)
-   {
-      auto n = time_it(g, paths, "nodes");
-      auto e = time_it(g, paths, "edges");
-      file << n << ", " << e << "\n";
+      read_graph(file_g, &g);
+      read_query(file_q, paths);
+      
+
+      int node_sum = 0;
+      int edge_sum = 0;
+      int runs = 0;
+
+      for (int j = 0; j < 10; j++)
+      {
+         node_sum += time_it(g, paths, "nodes");
+         edge_sum += time_it(g, paths, "edges");
+         runs++;
+      }
+
+      file << node_sum/runs << ", " << edge_sum/runs << "\n";
+      std::cout << node_sum / runs << ", " << edge_sum / runs << "\n";
    }
 
    return 0;
