@@ -3,6 +3,7 @@
 #include <cassert>
 #include "graph.h"
 
+
 using namespace graph;
 
 // create a new edge in the graph
@@ -254,39 +255,130 @@ void Node::detach_edge(Edge* e)
       }
 }
 
-void Graph::query(Query* q, std::ostream* out)
+std::vector<std::string> Graph::query(Query *q, std::ostream *out)
 {
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
+   std::vector<std::string> solutions;
+
    for(auto iter = this->edges.begin(); iter != this->edges.end(); iter++)
    {
       Edge* e = *iter;
       if(e->get_label() == *q_rel_it)
       {
-         // *out << "\t\tlabel found:" << *q_rel_it << "\n";
-         e->conditional_dfs(q, q_rel_it, e->get_source_label(), out);
+         e->conditional_dfs_edge(q, q_rel_it, &solutions, e->get_source_label(), out);
       }
    }
+   return solutions;
 }
 
-void Edge::conditional_dfs(Query* q, std::vector<std::string>::iterator q_rel_it, std::string source_label, std::ostream* out)
+void Edge::conditional_dfs_node(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
 {
-   q_rel_it++;
-   if(q_rel_it == q->relations.end())
+   rel_it++;
+   
+   if(rel_it == q->relations.end())
    {
       // solution found!
-      *out << "Solution: <" << source_label << ">  ->  <" << this->get_target_label() << ">\n";
-      
-      return;
-   }
-   
+      std::string solution = this->get_target_label();
+
+      sol->push_back(solution);
+     
+   } 
+    
    auto connections = this->target->get_outgoing_edges();
    for(auto step = connections.begin(); step != connections.end(); step++)
    {
       Edge* e = *step;
-      if(e->get_label() == *q_rel_it)
+      if(e->get_label() == *rel_it)
       {
-         // *out << "\tlabel found:" << *q_rel_it << "\n";
-         e->conditional_dfs(q, q_rel_it, source_label, out);
+         e->conditional_dfs_node(q, rel_it, sol, source_label, out);
+      }
+   } 
+   
+}
+
+void Edge::conditional_dfs_edge(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
+{
+   rel_it++;
+   
+   if(rel_it == q->relations.end())
+   {
+      // solution found!
+      std::string solution = source_label + " --> " + this->get_target_label();
+
+      sol->push_back(solution);
+      
+   } 
+    
+   auto connections = this->target->get_outgoing_edges();
+   for(auto step = connections.begin(); step != connections.end(); step++)
+   {
+      Edge* e = *step;
+      
+      if(e->get_label() == *rel_it)
+      {
+         e->conditional_dfs_edge(q, rel_it, sol, source_label, out);
+      }
+   } 
+   
+}
+
+std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *out)
+{
+   std::vector<std::string> q_sol = this->query(q, out);
+   std::vector<std::string> p_sol = this->query(p, out);
+
+   for (int i = 0; i != q_sol.size(); i++)
+   {
+      for (int j = 0; j != p_sol.size(); j++)
+      {
+         if (q_sol[i] == p_sol[j]) {
+            return "Solution: " + q_sol[i];
+         }
       }
    }
+
+   return "";
+}
+
+std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
+   std::vector<std::string>::iterator q_rel_it = q->relations.begin();
+   std::vector<std::string>::iterator p_rel_it = p->relations.begin();
+   
+
+   for(auto iter = this->nodes.begin(); iter != this->nodes.end(); iter++){
+      Node n = iter->second;
+      std::set<Edge*> n_edges = n.get_outgoing_edges();
+      std::vector<std::string> q_sol;
+      std::vector<std::string> p_sol;
+
+      // this for loops checks if the 
+      
+      for(auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter ++){
+         Edge* e = *e_iter;
+         
+         std::string e_label = e->get_label();
+         
+         if(e_label == *q_rel_it){
+            
+            e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
+            
+         }else if(e_label == *p_rel_it){
+            
+            e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);  
+         }
+         // checks if the same end node exist for both paths 
+         if (q_sol.size() >= 1 && p_sol.size() >= 1){
+            for (int i = 0; i != q_sol.size(); i++){
+               for (int j = 0; j != p_sol.size(); j++){
+                  if (q_sol[i] == p_sol[j]) {
+                     return "Solution: " + n.get_label() + " --> " + q_sol[i];
+                  }
+               }
+            }
+         }
+      
+      }
+   }
+   return "";
+                 
 }

@@ -6,6 +6,8 @@
 #include <map>
 #include <set>
 #include <string>
+#include <tuple>
+
 
 #include "query.h"
 
@@ -70,7 +72,8 @@ namespace graph
       }
       
       // querying DFS helper method
-      void conditional_dfs(Query* q, std::vector<std::string>::iterator q_rel_it, std::string source_label, std::ostream* out);
+      void conditional_dfs_node(Query* q, std::vector<std::string>::iterator q_rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out);
+      void conditional_dfs_edge(Query* q, std::vector<std::string>::iterator q_rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out);
 
    private:
       std::string label = "";  // the edge label is _not_ a unique identifier! (as opposed to node labels which are unique)
@@ -137,8 +140,12 @@ namespace graph
       Graph& operator=(Graph&& old);
       
       // apply query, write to out
-      void query(Query* q, std::ostream* out);
+      std::vector<std::string> query(Query *q, std::ostream *out);
       
+      // checks two queries by edges
+      std::string check_two_queries_by_edges(Query * q, Query *p, std::ostream *out);
+      std::string check_two_queries_by_nodes(Query *q, Query *p, std::ostream *out);
+
    private:
       // for this implementation, node labels are unique, and we identify nodes through their labels
       // hence it makes sense to use an STL map with the label as the key and the node as the value

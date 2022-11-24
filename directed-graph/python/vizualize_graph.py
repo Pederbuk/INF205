@@ -1,9 +1,11 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 
+<<<<<<< HEAD
 file_name = 'directed-graph/python/random_graph.dat'
+=======
+file_name = 'directed-graph/data/eks1.dat'
+>>>>>>> check_two_queries
 
 plt.figure("Graph")
 G = nx.DiGraph()
