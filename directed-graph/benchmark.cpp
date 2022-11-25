@@ -45,7 +45,7 @@ int main()
    graph::Query paths[2];
    graph::Graph g;
    
-   std::string dir = "data/no_solution/";
+   std::string dir = "data/solution/";
    
    // Create file
    std::ofstream file;
@@ -70,9 +70,9 @@ int main()
 
       for (int j = 0; j < 5; j++)
       {
-         node_sum += time_it(g, paths, "nodes", 1000);
-         para_sum += time_it(g, paths, "parallel", 1000);
-         edge_sum += time_it(g, paths, "edges", 1000);
+         node_sum += time_it(g, paths, "nodes", 10);
+         para_sum += time_it(g, paths, "parallel", 10);
+         edge_sum += time_it(g, paths, "edges", 10);
          runs++;
       }
 
