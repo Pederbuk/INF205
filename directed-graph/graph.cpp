@@ -262,7 +262,22 @@ std::vector<std::string> Graph::query(Query *q, std::ostream *out)
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string> solutions;
 
-   #pragma omp parallel num_threads(MAX) 
+   for(auto iter = this->edges.begin(); iter != this->edges.end(); iter++)
+   {
+      Edge* e = *iter;
+      if(e->get_label() == *q_rel_it)
+      {
+         e->conditional_dfs_edge(q, q_rel_it, &solutions, e->get_source_label(), out);
+      }
+   }
+   return solutions;
+} 
+
+std::vector<std::string> Graph::query_parallel(Query *q, std::ostream *out)
+{
+   std::vector<std::string>::iterator q_rel_it = q->relations.begin();
+   std::vector<std::string> solutions;
+
    for(auto iter = this->edges.begin(); iter != this->edges.end(); iter++)
    {
       Edge* e = *iter;
@@ -346,8 +361,19 @@ std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *
 
 std::string Graph::check_two_queries_parallel(Query *q, Query *p, std::ostream *out)
 {
-   std::vector<std::string> q_sol = this->query(q, out);
-   std::vector<std::string> p_sol = this->query(p, out);
+   std::vector<std::string> q_sol;
+   std::vector<std::string> p_sol;
+
+   #pragma omp parallel sections num_threads(2)
+   {
+      #pragma omp section{
+         q_sol = this->query_parallel(q, out);
+      }
+
+      #pragma omp section{
+         p_sol = this->query_parallel(p, out);
+      }
+   }
 
    for (int i = 0; i != q_sol.size(); i++)
    {
@@ -393,7 +419,8 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
          if (q_sol.size() >= 1 && p_sol.size() >= 1){
             for (int i = 0; i != q_sol.size(); i++){
                for (int j = 0; j != p_sol.size(); j++){
-                  if (q_sol[i] == p_sol[j]) {
+                  if (q_sol[i] == p_sol[_sol = this->query_parallel(p, out); j])
+                  {
                      return "Solution: " + n.get_label() + " --> " + q_sol[i];
                   }
                }
