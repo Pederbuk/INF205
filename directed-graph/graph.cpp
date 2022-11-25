@@ -394,17 +394,18 @@ std::string Graph::check_two_queries_parallel(Query *q, Query *p, std::ostream *
 std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string>::iterator p_rel_it = p->relations.begin();
+   std::string solution = "";
    
-
    for(auto iter = this->nodes.begin(); iter != this->nodes.end(); iter++){
+
       Node n = iter->second;
       std::set<Edge*> n_edges = n.get_outgoing_edges();
       std::vector<std::string> q_sol;
       std::vector<std::string> p_sol;
 
-      // this for loops checks if the 
-      
+      // this for loops checks if the
       for(auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter ++){
+         
          Edge* e = *e_iter;
          
          std::string e_label = e->get_label();
@@ -431,6 +432,65 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
       
       }
    }
-   return "";
-                 
+
+   return solution;
+}
+
+std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostream* out){
+   std::vector<std::string>::iterator q_rel_it = q->relations.begin();
+   std::vector<std::string>::iterator p_rel_it = p->relations.begin();
+   std::string solution = "";
+
+   std::vector<Node> graph_nodes;
+   for(auto iter = this->nodes.begin(); iter != this->nodes.end(); iter++){
+      graph_nodes.push_back(iter->second);
+   }
+   
+   // *out << "Graph size: " << graph_nodes.size()/10 << "\n";
+   #pragma omp parallel for schedule(static, 2)
+   for (int iter = 0; iter < graph_nodes.size(); iter++)
+   {
+      Node n = graph_nodes[iter];
+      std::set<Edge *> n_edges = n.get_outgoing_edges();
+      std::vector<std::string> q_sol;
+      std::vector<std::string> p_sol;
+
+      // this for loops checks if the
+      for (auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter++)
+      {
+
+         Edge *e = *e_iter;
+
+         std::string e_label = e->get_label();
+
+         if (e_label == *q_rel_it)
+         {
+
+            e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
+         }
+         else if (e_label == *p_rel_it)
+         {
+
+            e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);
+         }
+
+         // checks if the same end node exist for both paths
+         if (q_sol.size() >= 1 && p_sol.size() >= 1)
+         {
+            for (int i = 0; i != q_sol.size(); i++)
+            {
+               for (int j = 0; j != p_sol.size(); j++)
+               {
+                  if (q_sol[i] == p_sol[j])
+                  {
+                     solution = "Solution: " + n.get_label() + " --> " + q_sol[i];
+                     #pragma omp cancel for
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   return solution;
 }

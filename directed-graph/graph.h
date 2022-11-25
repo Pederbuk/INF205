@@ -147,6 +147,7 @@ namespace graph
       std::string check_two_queries_parallel(Query *q, Query *p, std::ostream *out);
       std::string check_two_queries_by_edges(Query * q, Query *p, std::ostream *out);
       std::string check_two_queries_by_nodes(Query *q, Query *p, std::ostream *out);
+      std::string check_two_queries_by_nodes_para(Query *q, Query *p, std::ostream *out);
 
    private:
       // for this implementation, node labels are unique, and we identify nodes through their labels

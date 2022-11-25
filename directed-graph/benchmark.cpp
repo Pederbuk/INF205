@@ -21,6 +21,9 @@ auto time_it(auto g, auto paths, std::string algo, int runs)
       if (algo == "nodes") {
          std::string result = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
       } 
+      else if (algo == "nodes_para") {
+         std::string result = g.check_two_queries_by_nodes_para(&paths[0], &paths[1], &std::cout);
+      }
       else if (algo == "parallel") {
          std::string result = g.check_two_queries_parallel(&paths[0], &paths[1], &std::cout);
       }
@@ -50,7 +53,7 @@ int main()
    // Create file
    std::ofstream file;
    file.open("data/benchmark.csv");
-   file << "nodes,edges,parallel\n";
+   file << "nodes,edges,parallel,nodes_para\n";
    
    // Loop files
    for (int i = 1; i < 11; i++) {
@@ -62,6 +65,7 @@ int main()
       
 
       int node_sum = 0;
+      int node_para_sum = 0;
       int para_sum = 0;
       int edge_sum = 0;
       int runs = 0;
@@ -70,13 +74,14 @@ int main()
 
       for (int j = 0; j < 5; j++)
       {
-         node_sum += time_it(g, paths, "nodes", 10);
-         para_sum += time_it(g, paths, "parallel", 10);
-         edge_sum += time_it(g, paths, "edges", 10);
+         node_sum += time_it(g, paths, "nodes", 5);
+         node_para_sum += time_it(g, paths, "nodes_para", 5);
+         para_sum += time_it(g, paths, "parallel", 5);
+         edge_sum += time_it(g, paths, "edges", 5);
          runs++;
       }
 
-      file << node_sum / runs << "," << edge_sum / runs << "," << para_sum / runs << "\n";
+      file << node_sum / runs << "," << edge_sum / runs << "," << para_sum / runs << "," << node_para_sum / runs << "\n";
 
       std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
       std::cout << result << "\n";
