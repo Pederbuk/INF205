@@ -143,6 +143,7 @@ namespace graph
       std::vector<std::string> query(Query *q, std::ostream *out);
       
       // checks two queries by edges
+      std::string check_two_queries_parallel(Query *q, Query *p, std::ostream *out);
       std::string check_two_queries_by_edges(Query * q, Query *p, std::ostream *out);
       std::string check_two_queries_by_nodes(Query *q, Query *p, std::ostream *out);
 

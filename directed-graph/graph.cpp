@@ -2,7 +2,9 @@
 
 #include <cassert>
 #include "graph.h"
-
+#include <thread>
+#include <omp.h>
+#include <stdio.h>
 
 using namespace graph;
 
@@ -260,6 +262,7 @@ std::vector<std::string> Graph::query(Query *q, std::ostream *out)
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string> solutions;
 
+   #pragma omp parallel num_threads(MAX) 
    for(auto iter = this->edges.begin(); iter != this->edges.end(); iter++)
    {
       Edge* e = *iter;
@@ -339,6 +342,26 @@ std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *
 
    return "";
 }
+
+
+std::string Graph::check_two_queries_parallel(Query *q, Query *p, std::ostream *out)
+{
+   std::vector<std::string> q_sol = this->query(q, out);
+   std::vector<std::string> p_sol = this->query(p, out);
+
+   for (int i = 0; i != q_sol.size(); i++)
+   {
+      for (int j = 0; j != p_sol.size(); j++)
+      {
+         if (q_sol[i] == p_sol[j]) {
+            return "Solution: " + q_sol[i];
+         }
+      }
+   }
+
+   return "";
+}
+
 
 std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
