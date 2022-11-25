@@ -37,7 +37,6 @@ auto time_it(auto g, auto paths, std::string algo, int runs)
 
    // Print duration
    auto duration = duration_cast<milliseconds>(stop - start);
-   // std::cout << algo << ": " << duration.count() << " milliseconds" << std::endl;
 
    return duration.count();
 }
@@ -48,7 +47,7 @@ int main()
    graph::Query paths[2];
    graph::Graph g;
    
-   std::string dir = "data/solution/";
+   std::string dir = "data/no_solution/";
    
    // Create file
    std::ofstream file;
@@ -74,10 +73,10 @@ int main()
 
       for (int j = 0; j < 5; j++)
       {
-         node_sum += time_it(g, paths, "nodes", 5);
-         node_para_sum += time_it(g, paths, "nodes_para", 5);
-         para_sum += time_it(g, paths, "parallel", 5);
-         edge_sum += time_it(g, paths, "edges", 5);
+         node_sum += time_it(g, paths, "nodes", 1000);
+         node_para_sum += time_it(g, paths, "nodes_para", 1000);
+         para_sum += time_it(g, paths, "parallel", 1000);
+         edge_sum += time_it(g, paths, "edges", 1000);
          runs++;
       }
 
