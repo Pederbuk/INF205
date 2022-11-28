@@ -46,7 +46,7 @@ int main()
    graph::Query paths[2];
    graph::Graph g;
    
-   std::string dir = "data/solution_none/";
+   std::string dir = "data/solution_mix/";
    
    // Create file
    std::ofstream file;
@@ -55,7 +55,7 @@ int main()
    
    int solution = 0;
    // Loop files
-   for (int i = 1; i <= 1000; i++) {
+   for (int i = 1; i <= 100; i++) {
       std::string file_g = dir + "b" + std::to_string(i) + "_g.dat";
       std::string file_q = dir + "b" + std::to_string(i) + "_q.dat";
 
