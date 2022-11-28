@@ -445,9 +445,12 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
       graph_edges.push_back(iter->second);
    }
 
-   #pragma omp parallel for shared(solution)
-   for (auto iter = 0; iter < graph_edges.size(); iter++)
+   #pragma omp parallel
    {
+   #pragma omp for
+   for (int iter = 0; iter < graph_edges.size(); iter++)
+   {
+
       Node n = graph_edges[iter];
       std::set<Edge *> n_edges = n.get_outgoing_edges();
       std::vector<std::string>::iterator q_rel_it = q->relations.begin();
@@ -469,21 +472,21 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
          {
             e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);
          }
-      }
 
-      // checks if the same end node exist for both paths
-      for (int i = 0; i != q_sol.size(); i++)
-      {
-         for (int j = 0; j != p_sol.size(); j++)
+         // checks if the same end node exist for both paths
+         for (int i = 0; i != q_sol.size(); i++)
          {
-            if (q_sol[i] == p_sol[j])
+            for (int j = 0; j != p_sol.size(); j++)
             {
-               solution = 1;
-               #pragma omp cancel for
+               if (q_sol[i] == p_sol[j])
+               {
+                  solution = 1;
+                  #pragma omp cancel for
+               }
             }
          }
       }
    }
-
+   }
    return std::to_string(solution);
 }

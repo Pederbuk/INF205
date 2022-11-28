@@ -10,33 +10,30 @@
 #include "read-input.h"
 using namespace std::chrono;
 
-auto time_it(auto g, auto paths, std::string algo, int runs)
+auto time_it(auto g, auto paths, std::string algo)
 {
    // Get starting timepoint
    auto start = high_resolution_clock::now();
 
    // Call the function
-   for (int i = 0; i < runs; i++)
-   {  
-      if (algo == "nodes") {
-         std::string result = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
-      } 
-      else if (algo == "nodes_para") {
-         std::string result = g.check_two_queries_by_nodes_para(&paths[0], &paths[1], &std::cout);
-      }
-      else if (algo == "parallel") {
-         std::string result = g.check_two_queries_parallel(&paths[0], &paths[1], &std::cout);
-      }
-      else {
-         std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
-      }
+   if (algo == "nodes") {
+      std::string result = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
+   } 
+   if (algo == "nodes_para") {
+      std::string result = g.check_two_queries_by_nodes_para(&paths[0], &paths[1], &std::cout);
+   }
+   if (algo == "parallel") {
+      std::string result = g.check_two_queries_parallel(&paths[0], &paths[1], &std::cout);
+   }
+   if (algo == "edges") {
+      std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
    }
 
    // Get ending timepoint
    auto stop = high_resolution_clock::now();
 
    // Print duration
-   auto duration = duration_cast<milliseconds>(stop - start);
+   auto duration = duration_cast<nanoseconds>(stop - start);
 
    return duration.count();
 }
@@ -54,8 +51,9 @@ int main()
    file.open("data/benchmark.csv");
    file << "nodes,edges,parallel,nodes_para\n";
    
+   int solution = 0;
    // Loop files
-   for (int i = 1; i < 11; i++) {
+   for (int i = 1; i <= 1000; i++) {
       std::string file_g = dir + "b" + std::to_string(i) + "_g.dat";
       std::string file_q = dir + "b" + std::to_string(i) + "_q.dat";
 
@@ -73,17 +71,20 @@ int main()
 
       for (int j = 0; j < 5; j++)
       {
-         node_sum += time_it(g, paths, "nodes", 1000);
-         node_para_sum += time_it(g, paths, "nodes_para", 1000);
-         para_sum += time_it(g, paths, "parallel", 1000);
-         edge_sum += time_it(g, paths, "edges", 1000);
+         node_sum += time_it(g, paths, "nodes");
+         node_para_sum += time_it(g, paths, "nodes_para");
+         para_sum += time_it(g, paths, "parallel");
+         edge_sum += time_it(g, paths, "edges");
          runs++;
       }
 
       file << node_sum / runs << "," << edge_sum / runs << "," << para_sum / runs << "," << node_para_sum / runs << "\n";
 
       std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
-      std::cout << result << "\n";
+      if (result != "") {
+         solution++;
+      }
+      std::cout << "Solutions: " << solution << "\n";
       }
 
    return 0;
