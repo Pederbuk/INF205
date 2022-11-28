@@ -55,7 +55,7 @@ int main()
    
    int solution = 0;
    // Loop files
-   for (int i = 1; i <= 100; i++) {
+   for (int i = 1; i <= 1000; i++) {
       std::string file_g = dir + "b" + std::to_string(i) + "_g.dat";
       std::string file_q = dir + "b" + std::to_string(i) + "_q.dat";
 
