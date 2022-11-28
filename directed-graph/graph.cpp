@@ -1,10 +1,12 @@
-/* undirected incidence-list graph implementation */
+/* undirected incidence-list graph implementation 
+most of the code here is from a handout by Martin Thomas Horst, the code is  */
 
 #include <cassert>
 #include "graph.h"
 #include <thread>
 #include <omp.h>
 #include <stdio.h>
+
 
 using namespace graph;
 
@@ -323,7 +325,7 @@ void Edge::conditional_dfs_edge(Query* q, std::vector<std::string>::iterator rel
    } 
    
 }
-
+// function that checks two queries by iterating through the edges of the graph
 std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *out)
 {
    std::vector<std::string> q_sol = this->query(q, out);
@@ -341,7 +343,7 @@ std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *
 
    return "";
 }
-
+// function that checks two queries by iterating through the edges of the graph in parallel
 std::string Graph::check_two_queries_by_edges_para(Query *q, Query *p, std::ostream *out)
 {
    std::vector<std::string> q_sol;
@@ -372,7 +374,7 @@ std::string Graph::check_two_queries_by_edges_para(Query *q, Query *p, std::ostr
    return "";
 }
 
-
+// funtion that checks the graph by iterating through the nodes
 std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string>::iterator p_rel_it = p->relations.begin();
@@ -416,7 +418,7 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
 
    return solution;
 }
-
+// function that checks the graph by nodes in parallel
 std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostream* out){
    int sol_from = 0;
    int sol_to = 0;

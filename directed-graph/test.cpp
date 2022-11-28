@@ -10,6 +10,7 @@
 #include "query.h"
 #include "read-input.h"
   
+// test funcktion
 void test(std::string sol){
 
    std::string real_sol = "Solution: 1 --> 6";
