@@ -25,9 +25,9 @@ plot_benchmark(data_1, 'Solution')
 data_2 = pd.read_csv('directed-graph/data/benchmark_mix.csv')
 plot_benchmark(data_2, 'Mixed solutions')
 
-# # Benchmark
-# data_3 = pd.read_csv('directed-graph/data/benchmark.csv')
-# plot_benchmark(data_3, 'Benchmark')
+# Benchmark
+data_3 = pd.read_csv('directed-graph/data/benchmark.csv')
+plot_benchmark(data_3, 'Benchmark')
 
 
 plt.show()

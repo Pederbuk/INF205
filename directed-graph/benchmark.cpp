@@ -71,7 +71,7 @@ int main()
 
       std::cout << "Running: " << file_g << "\n";
 
-      for (int j = 0; j < 5; j++)
+      for (int j = 0; j < 1; j++)
       {
          node_sum += time_it(g, paths, "nodes");
          edge_sum += time_it(g, paths, "edges");

@@ -4,10 +4,10 @@ from random import randint, choices, choice
 for i in range(1, 1001):
     """ Parameters """
     n_nodes = i + 10
-    n_edges = n_nodes * 10
+    n_edges = n_nodes * 5
     n_edge_labels = 5
     query_len = 5
-    folder = 'solution'
+    folder = 'solution_mix'
     """ ---------- """
 
 
