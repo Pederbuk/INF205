@@ -46,7 +46,7 @@ int main()
    graph::Query paths[2];
    graph::Graph g;
    
-   std::string dir = "data/no_solution/";
+   std::string dir = "data/solution_none/";
    
    // Create file
    std::ofstream file;
