@@ -420,57 +420,55 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
 std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostream* out){
    int sol_from = 0;
    int sol_to = 0;
+   bool foundCondition = false;
 
-   std::vector<Node> graph_edges;
-   for (auto iter = this->nodes.begin(); iter != this->nodes.end(); iter++)
+   #pragma omp parallel for
+   for (int i = 0; i < this->nodes.size(); i++)
    {
-      graph_edges.push_back(iter->second);
-   }
-
-   #pragma omp parallel
-   {
-   #pragma omp for
-   for (int iter = 0; iter < graph_edges.size(); iter++)
-   {
-
-      Node n = graph_edges[iter];
-      std::set<Edge *> n_edges = n.get_outgoing_edges();
-      std::vector<std::string>::iterator q_rel_it = q->relations.begin();
-      std::vector<std::string>::iterator p_rel_it = p->relations.begin();
-      std::vector<std::string> q_sol;
-      std::vector<std::string> p_sol;
-
-
-      // Checks outgoing edges
-      for (auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter++)
+      if (foundCondition == false)
       {
-         Edge *e = *e_iter;
+         auto node_it = this-> nodes.begin();
+         Node n = node_it->second;
+         std::set<Edge *> n_edges = n.get_outgoing_edges();
+         std::vector<std::string>::iterator q_rel_it = q->relations.begin();
+         std::vector<std::string>::iterator p_rel_it = p->relations.begin();
+         std::vector<std::string> q_sol;
+         std::vector<std::string> p_sol;
 
-         if (e->get_label() == *q_rel_it)
+         // Checks outgoing edges
+         for (auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter++)
          {
-            e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
-         }
-         else if (e->get_label() == *p_rel_it)
-         {
-            e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);
-         }
+            Edge *e = *e_iter;
 
-         // checks if the same end node exist for both paths
-         for (int i = 0; i != q_sol.size(); i++)
-         {
-            for (int j = 0; j != p_sol.size(); j++)
+            if (e->get_label() == *q_rel_it)
             {
-               if (q_sol[i] == p_sol[j])
+               e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
+            }
+            else if (e->get_label() == *p_rel_it)
+            {
+               e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);
+            }
+
+            // checks if the same end node exist for both paths
+            for (int i = 0; i != q_sol.size(); i++)
+            {
+               for (int j = 0; j != p_sol.size(); j++)
                {
-                  sol_from = stoi(n.get_label());
-                  sol_to = stoi(q_sol[i]);
-                  #pragma omp cancel for
+                  if (q_sol[i] == p_sol[j])
+                  {
+                     #pragma omp critical
+                     {
+                        sol_from = stoi(n.get_label());
+                        sol_to = stoi(q_sol[i]);
+                        foundCondition = true;
+                     }
+                  }
                }
             }
          }
+         advance(node_it, i);
       }
    }
-   }
-   
+
    return "Solution: " + std::to_string(sol_from) + " --> " + std::to_string(sol_to);
 }
