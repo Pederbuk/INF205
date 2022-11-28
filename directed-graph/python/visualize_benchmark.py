@@ -5,7 +5,7 @@ import numpy as np
 
 def plot_benchmark(df, title):
     for col in df:
-        df[col] = df[col].rolling(10).mean()
+        df[col] = df[col].rolling(1).mean()
 
     df.plot(title=title)
     plt.xlabel('Number of nodes')

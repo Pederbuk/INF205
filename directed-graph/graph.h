@@ -144,9 +144,9 @@ namespace graph
       std::vector<std::string> query_parallel(Query *q, std::ostream *out);
 
       // checks two queries by edges
-      std::string check_two_queries_parallel(Query *q, Query *p, std::ostream *out);
       std::string check_two_queries_by_edges(Query * q, Query *p, std::ostream *out);
       std::string check_two_queries_by_nodes(Query *q, Query *p, std::ostream *out);
+      std::string check_two_queries_by_edges_para(Query *q, Query *p, std::ostream *out);
       std::string check_two_queries_by_nodes_para(Query *q, Query *p, std::ostream *out);
 
    private:

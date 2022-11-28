@@ -462,8 +462,8 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
             {
                if (q_sol[i] == p_sol[j])
                {
-                  sol_from = n.get_label();
-                  sol_to = q_sol[i];
+                  sol_from = stoi(n.get_label());
+                  sol_to = stoi(q_sol[i]);
                   #pragma omp cancel for
                }
             }
@@ -471,5 +471,6 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
       }
    }
    }
-   return std::to_string(solution);
+   
+   return "Solution: " + std::to_string(sol_from) + " --> " + std::to_string(sol_to);
 }

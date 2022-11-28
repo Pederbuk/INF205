@@ -28,7 +28,11 @@ int main()
    std::string result_2 = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
    std::cout << "Nodes: " << result_2 << '\n';
 
-   std::string result_3 = g.check_two_queries_parallel(&paths[0], &paths[1], &std::cout);
-   std::cout << "Parallel: " << result_3 << '\n';
+   std::string result_3 = g.check_two_queries_by_edges_para(&paths[0], &paths[1], &std::cout);
+   std::cout << "Edges para: " << result_3 << '\n';
+
+   std::string result_4 = g.check_two_queries_by_nodes_para(&paths[0], &paths[1], &std::cout);
+   std::cout << "Nodes para: " << result_4 << '\n';
+
    return 0;
 }

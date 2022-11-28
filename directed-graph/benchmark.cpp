@@ -10,6 +10,7 @@
 #include "read-input.h"
 using namespace std::chrono;
 
+
 auto time_it(auto g, auto paths, std::string algo)
 {
    // Get starting timepoint
@@ -19,14 +20,15 @@ auto time_it(auto g, auto paths, std::string algo)
    if (algo == "nodes") {
       std::string result = g.check_two_queries_by_nodes(&paths[0], &paths[1], &std::cout);
    } 
+   if (algo == "edges") {
+      std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
+   }
    if (algo == "nodes_para") {
       std::string result = g.check_two_queries_by_nodes_para(&paths[0], &paths[1], &std::cout);
    }
-   if (algo == "parallel") {
-      std::string result = g.check_two_queries_parallel(&paths[0], &paths[1], &std::cout);
-   }
-   if (algo == "edges") {
-      std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
+   if (algo == "edges_para")
+   {
+      std::string result = g.check_two_queries_by_edges_para(&paths[0], &paths[1], &std::cout);
    }
 
    // Get ending timepoint
@@ -49,7 +51,7 @@ int main()
    // Create file
    std::ofstream file;
    file.open("data/benchmark.csv");
-   file << "nodes,edges,parallel,nodes_para\n";
+   file << "nodes,edges,edges_para,nodes_para\n";
    
    int solution = 0;
    // Loop files
@@ -62,9 +64,9 @@ int main()
       
 
       int node_sum = 0;
-      int node_para_sum = 0;
-      int para_sum = 0;
       int edge_sum = 0;
+      int node_para_sum = 0;
+      int edges_para_sum = 0;
       int runs = 0;
 
       std::cout << "Running: " << file_g << "\n";
@@ -72,13 +74,13 @@ int main()
       for (int j = 0; j < 5; j++)
       {
          node_sum += time_it(g, paths, "nodes");
-         node_para_sum += time_it(g, paths, "nodes_para");
-         para_sum += time_it(g, paths, "parallel");
          edge_sum += time_it(g, paths, "edges");
+         node_para_sum += time_it(g, paths, "nodes_para");
+         edges_para_sum += time_it(g, paths, "edges_para");
          runs++;
       }
 
-      file << node_sum / runs << "," << edge_sum / runs << "," << para_sum / runs << "," << node_para_sum / runs << "\n";
+      file << node_sum / runs << "," << edge_sum / runs << "," << edges_para_sum / runs << "," << node_para_sum / runs << "\n";
 
       std::string result = g.check_two_queries_by_edges(&paths[0], &paths[1], &std::cout);
       if (result != "") {
