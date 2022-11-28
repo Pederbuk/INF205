@@ -273,22 +273,6 @@ std::vector<std::string> Graph::query(Query *q, std::ostream *out)
    return solutions;
 } 
 
-std::vector<std::string> Graph::query_parallel(Query *q, std::ostream *out)
-{
-   std::vector<std::string>::iterator q_rel_it = q->relations.begin();
-   std::vector<std::string> solutions;
-
-   for (auto iter = this->edges.begin(); iter != this->edges.end(); iter++)
-   {
-      Edge* e = *iter;
-      if(e->get_label() == *q_rel_it)
-      {
-         e->conditional_dfs_edge(q, q_rel_it, &solutions, e->get_source_label(), out);
-      }
-   }
-   return solutions;
-}
-
 void Edge::conditional_dfs_node(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
 {
    rel_it++;
@@ -358,8 +342,7 @@ std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *
    return "";
 }
 
-
-std::string Graph::check_two_queries_parallel(Query *q, Query *p, std::ostream *out)
+std::string Graph::check_two_queries_by_edges_para(Query *q, Query *p, std::ostream *out)
 {
    std::vector<std::string> q_sol;
    std::vector<std::string> p_sol;
@@ -368,12 +351,11 @@ std::string Graph::check_two_queries_parallel(Query *q, Query *p, std::ostream *
    {
       #pragma omp section
       {
-         q_sol = this->query_parallel(q, out);
+         q_sol = this->query(q, out);
       }
-
       #pragma omp section
       {
-         p_sol = this->query_parallel(p, out);
+         p_sol = this->query(p, out);
       }
    }
 
@@ -418,14 +400,13 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
             
             e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);  
          }
+
          // checks if the same end node exist for both paths 
-         if (q_sol.size() >= 1 && p_sol.size() >= 1){
-            for (int i = 0; i != q_sol.size(); i++){
-               for (int j = 0; j != p_sol.size(); j++){
-                  if (q_sol[i] == p_sol[j])
-                  {
-                     return "Solution: " + n.get_label() + " --> " + q_sol[i];
-                  }
+         for (int i = 0; i != q_sol.size(); i++){
+            for (int j = 0; j != p_sol.size(); j++){
+               if (q_sol[i] == p_sol[j])
+               {
+                  return "Solution: " + n.get_label() + " --> " + q_sol[i];
                }
             }
          }
@@ -437,7 +418,8 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
 }
 
 std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostream* out){
-   int solution = 0;
+   int sol_from = 0;
+   int sol_to = 0;
 
    std::vector<Node> graph_edges;
    for (auto iter = this->nodes.begin(); iter != this->nodes.end(); iter++)
@@ -480,7 +462,8 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
             {
                if (q_sol[i] == p_sol[j])
                {
-                  solution = 1;
+                  sol_from = n.get_label();
+                  sol_to = q_sol[i];
                   #pragma omp cancel for
                }
             }
