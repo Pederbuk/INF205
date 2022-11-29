@@ -141,7 +141,6 @@ namespace graph
       
       // apply query, write to out
       std::vector<std::string> query(Query *q, std::ostream *out);
-      std::vector<std::string> query_parallel(Query *q, std::ostream *out);
 
       // checks two queries by edges
       std::string check_two_queries_by_edges(Query * q, Query *p, std::ostream *out);
