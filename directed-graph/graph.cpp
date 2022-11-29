@@ -402,17 +402,17 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
             
             e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);  
          }
+      }
 
-         // checks if the same end node exist for both paths 
-         for (int i = 0; i != q_sol.size(); i++){
-            for (int j = 0; j != p_sol.size(); j++){
-               if (q_sol[i] == p_sol[j])
-               {
-                  return "Solution: " + n.get_label() + " --> " + q_sol[i];
-               }
+      // checks if the same end node exist for both paths 
+      for (int i = 0; i != q_sol.size(); i++)
+      {
+         for (int j = 0; j != p_sol.size(); j++){
+            if (q_sol[i] == p_sol[j])
+            {
+               return "Solution: " + n.get_label() + " --> " + q_sol[i];
             }
          }
-      
       }
    }
 
@@ -450,20 +450,20 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
             {
                e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);
             }
+         }
 
-            // checks if the same end node exist for both paths
-            for (int i = 0; i != q_sol.size(); i++)
+         // checks if the same end node exist for both paths
+         for (int i = 0; i != q_sol.size(); i++)
+         {
+            for (int j = 0; j != p_sol.size(); j++)
             {
-               for (int j = 0; j != p_sol.size(); j++)
+               if (q_sol[i] == p_sol[j])
                {
-                  if (q_sol[i] == p_sol[j])
+                  #pragma omp critical
                   {
-                     #pragma omp critical
-                     {
-                        sol_from = stoi(n.get_label());
-                        sol_to = stoi(q_sol[i]);
-                        foundCondition = true;
-                     }
+                     sol_from = stoi(n.get_label());
+                     sol_to = stoi(q_sol[i]);
+                     foundCondition = true;
                   }
                }
             }
