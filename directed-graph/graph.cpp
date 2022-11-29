@@ -1,5 +1,7 @@
 /* undirected incidence-list graph implementation 
-most of the code here is from a handout by Martin Thomas Horst, the code is  */
+most of the code here is from a handout by Martin Thomas Horst, 
+the code is released under the 
+ */
 
 #include <cassert>
 #include "graph.h"
@@ -379,7 +381,7 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string>::iterator p_rel_it = p->relations.begin();
    std::string solution = "";
-   
+   // loops though the nodes
    for(auto iter = this->nodes.begin(); iter != this->nodes.end(); iter++){
 
       Node n = iter->second;
@@ -393,12 +395,13 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
          Edge* e = *e_iter;
          
          std::string e_label = e->get_label();
-         
+         // checks if the edge is the first edge of the q-query
          if(e_label == *q_rel_it){
             
             e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
             
-         }else if(e_label == *p_rel_it){
+         }else if(e_label == *p_rel_it) // checks if the egde is the first edge of the p-query
+         {
             
             e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);  
          }
@@ -425,9 +428,11 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
    bool foundCondition = false;
 
    #pragma omp parallel for
+   // loops though the nodes in parallel
    for (int i = 0; i < this->nodes.size(); i++)
    {
-      if (foundCondition == false)
+      // checks the foundCondition flag if the solution is found 
+      if (!foundCondition) 
       {
          auto node_it = this-> nodes.begin();
          Node n = node_it->second;
@@ -441,12 +446,12 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
          for (auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter++)
          {
             Edge *e = *e_iter;
-
+            // checks if the edge is the first edge of the q-query
             if (e->get_label() == *q_rel_it)
             {
                e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
             }
-            else if (e->get_label() == *p_rel_it)
+            else if (e->get_label() == *p_rel_it) // checks if the egde is the first edge of the p-query
             {
                e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);
             }
