@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-file_name = 'directed-graph/python/rand_graph.dat'
+file_name = 'pox-graph/python/rand_graph.dat'
 
 plt.figure("Graph")
 G = nx.DiGraph()
