@@ -46,7 +46,7 @@ int main()
    graph::Query paths[2];
    graph::Graph g;
    
-   std::string dir = "data/solution_mix/";
+   std::string dir = "data/solution/";
    
    // Create file
    std::ofstream file;
@@ -71,7 +71,7 @@ int main()
 
       std::cout << "Running: " << file_g << "\n";
 
-      for (int j = 0; j < 1; j++)
+      for (int j = 0; j < 3; j++)
       {
          node_sum += time_it(g, paths, "nodes");
          edge_sum += time_it(g, paths, "edges");
