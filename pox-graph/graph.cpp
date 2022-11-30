@@ -1,7 +1,8 @@
 /* undirected incidence-list graph implementation 
-most of the code here is from a handout by Martin Thomas Horst, 
-the code is released under the 
+the graph and query code is gotten from a handout by Martin Thomas Horst, 
+the code is released under the CC BY-NC-SA 4.0 license
  */
+ 
 
 #include <cassert>
 #include "graph.h"
