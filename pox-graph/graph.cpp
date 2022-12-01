@@ -1,5 +1,5 @@
 /* undirected incidence-list graph implementation 
-the graph and query code is gotten from a handout by Martin Thomas Horst, 
+the graph and query code is gotten from a handout by Martin Thomas Horsch, 
 the code is released under the CC BY-NC-SA 4.0 license
  */
  
@@ -277,7 +277,7 @@ std::vector<std::string> Graph::query(Query *q, std::ostream *out)
    }
    return solutions;
 } 
-
+// function for conditional dfs on nodes adds the solution just the end node
 void Edge::conditional_dfs_node(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
 {
    rel_it++;
@@ -290,7 +290,7 @@ void Edge::conditional_dfs_node(Query* q, std::vector<std::string>::iterator rel
       sol->push_back(solution);
      
    } 
-    
+
    auto connections = this->target->get_outgoing_edges();
    for(auto step = connections.begin(); step != connections.end(); step++)
    {
@@ -302,6 +302,7 @@ void Edge::conditional_dfs_node(Query* q, std::vector<std::string>::iterator rel
    } 
    
 }
+// function for conditional dfs on edges adds the solution with both start and end node
 
 void Edge::conditional_dfs_edge(Query* q, std::vector<std::string>::iterator rel_it, std::vector<std::string>* sol, std::string source_label, std::ostream* out)
 {
