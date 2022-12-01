@@ -1,9 +1,10 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-file_name = 'pox-graph/python/rand_graph.dat'
+file_name = 'pox-graph/data/eks1.dat'
 
 plt.figure("Graph")
+plt.title("Graph eks1")
 G = nx.DiGraph()
 
 node_labels = {}
@@ -18,10 +19,10 @@ for line in open(file_name).readlines():
         node_labels[line[0]] = str(line[0])
         node_labels[line[-1]] = str(line[-1])
 
-# pos = nx.shell_layout(G)
-pos = nx.random_layout(G)
+pos = nx.shell_layout(G)
+# pos = nx.random_layout(G)
 
 nx.draw_networkx(G, pos=pos, labels=node_labels, arrows=True, node_color="skyblue")
-# nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
+nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
 
 plt.show()
