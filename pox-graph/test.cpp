@@ -17,7 +17,7 @@ void test_sol(std::string sol, bool is_soution, int* tests_passed){
       std::string real_sol = "Solution: 1 --> 6";
       if (sol == real_sol){
          std::cout<<"Passed \n";
-         *tests_passed++;
+         *tests_passed += 1;
       } else{
          std::cout<<"Failed \n";
       } 
@@ -27,7 +27,7 @@ void test_sol(std::string sol, bool is_soution, int* tests_passed){
       std::string real_sol = "";
       if (sol == real_sol){
          std::cout<<"Passed \n";
-         *tests_passed ++;
+         *tests_passed += 1;
       } else{
          std::cout<<"Failed \n";
       }
