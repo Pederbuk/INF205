@@ -329,12 +329,17 @@ void Edge::conditional_dfs_edge(Query* q, std::vector<std::string>::iterator rel
    } 
    
 }
-// function that checks two queries by iterating through the edges of the graph
+
+/* --------------------- Query ---------------------
+   Function that checks two queries by iterating through the edges of the graph
+*/
 std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *out)
 {
+   // Get instances of the two queries in the graph
    std::vector<std::string> q_sol = this->query(q, out);
    std::vector<std::string> p_sol = this->query(p, out);
 
+   // Check if the two queries have the same solutions
    for (int i = 0; i != q_sol.size(); i++)
    {
       for (int j = 0; j != p_sol.size(); j++)
@@ -345,26 +350,36 @@ std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *
       }
    }
 
+   // If no solution was found
    return "";
 }
-// function that checks two queries by iterating through the edges of the graph in parallel
+
+
+/* --------------------- Query --------------------- 
+   Function that checks two queries by iterating through the edges of the graph in parallel
+*/
 std::string Graph::check_two_queries_by_edges_para(Query *q, Query *p, std::ostream *out)
 {
+   // Declare variables
    std::vector<std::string> q_sol;
    std::vector<std::string> p_sol;
 
+   // Split the queries into two threads
    #pragma omp parallel sections num_threads(2)
    {
       #pragma omp section
       {
+         // Get instances of q-query in the graph
          q_sol = this->query(q, out);
       }
       #pragma omp section
       {
+         // Get instances of p-query in the graph
          p_sol = this->query(p, out);
       }
    }
 
+   // Check if the two queries have the same solutions
    for (int i = 0; i != q_sol.size(); i++)
    {
       for (int j = 0; j != p_sol.size(); j++)
@@ -375,15 +390,20 @@ std::string Graph::check_two_queries_by_edges_para(Query *q, Query *p, std::ostr
       }
    }
 
+   // If no solution was found
    return "";
 }
 
-// funtion that checks the graph by iterating through the nodes
+
+/* --------------------- Query --------------------- 
+   Function that checks two queries by iterating through the nodes of the graph
+*/
 std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* out){
    std::vector<std::string>::iterator q_rel_it = q->relations.begin();
    std::vector<std::string>::iterator p_rel_it = p->relations.begin();
    std::string solution = "";
-   // loops though the nodes
+
+   // Loops though the nodes
    for(auto iter = this->nodes.begin(); iter != this->nodes.end(); iter++){
 
       Node n = iter->second;
@@ -391,25 +411,21 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
       std::vector<std::string> q_sol;
       std::vector<std::string> p_sol;
 
-      // this for loops checks if the
+      // Loops though the edges of the node
       for(auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter ++){
          
          Edge* e = *e_iter;
-         
          std::string e_label = e->get_label();
-         // checks if the edge is the first edge of the q-query
-         if(e_label == *q_rel_it){
-            
+         
+         // Checks if the edge is the first edge of the query
+         if(e_label == *q_rel_it) {
             e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
-            
-         }else if(e_label == *p_rel_it) // checks if the egde is the first edge of the p-query
-         {
-            
+         }else if(e_label == *p_rel_it) {
             e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);  
          }
       }
 
-      // checks if the same end node exist for both paths 
+      // Checks if the two queries have the same solutions
       for (int i = 0; i != q_sol.size(); i++)
       {
          for (int j = 0; j != p_sol.size(); j++){
@@ -423,17 +439,21 @@ std::string Graph::check_two_queries_by_nodes(Query* q, Query* p, std::ostream* 
 
    return solution;
 }
-// function that checks the graph by nodes in parallel
+
+
+/* --------------------- Query --------------------- 
+   Function that checks two queries by iterating through the nodes of the graph in parallel
+*/
 std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostream* out){
    int sol_from = 0;
    int sol_to = 0;
    bool foundCondition = false;
 
+   // Loops though the nodes in parallel
    #pragma omp parallel for
-   // loops though the nodes in parallel
    for (int i = 0; i < this->nodes.size(); i++)
    {
-      // checks the foundCondition flag if the solution is found 
+      // Checks the foundCondition flag if a solution is found 
       if (!foundCondition) 
       {
          auto node_it = this-> nodes.begin();
@@ -448,24 +468,24 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
          for (auto e_iter = n_edges.begin(); e_iter != n_edges.end(); e_iter++)
          {
             Edge *e = *e_iter;
-            // checks if the edge is the first edge of the q-query
-            if (e->get_label() == *q_rel_it)
-            {
+
+            // Checks if the edge is the first edge of the query
+            if (e->get_label() == *q_rel_it) {
                e->conditional_dfs_node(q, q_rel_it, &q_sol, n.get_label(), out);
             }
-            else if (e->get_label() == *p_rel_it) // checks if the egde is the first edge of the p-query
-            {
+            else if (e->get_label() == *p_rel_it) {
                e->conditional_dfs_node(p, p_rel_it, &p_sol, n.get_label(), out);
             }
          }
 
-         // checks if the same end node exist for both paths
+         // Checks if the two queries have the same solutions
          for (int i = 0; i != q_sol.size(); i++)
          {
             for (int j = 0; j != p_sol.size(); j++)
             {
                if (q_sol[i] == p_sol[j])
                {
+                  // Ensures that only one thread can write to the solution variables
                   #pragma omp critical
                   {
                      sol_from = stoi(n.get_label());
@@ -475,6 +495,8 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
                }
             }
          }
+
+         // Increments the node iterator
          advance(node_it, i);
       }
    }
