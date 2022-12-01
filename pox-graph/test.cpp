@@ -4,14 +4,13 @@
 #include <cassert>
 #include <fstream>
 
-
-
 #include "graph.h"
 #include "query.h"
 #include "read-input.h"
   
+
 /*
-test function for testing individual functions
+Test function for testing individual functions
 */ 
 void test_sol(std::string sol, bool is_soution){
    if (is_soution){
@@ -22,6 +21,7 @@ void test_sol(std::string sol, bool is_soution){
          std::cout<<"Failed \n";
       } 
    }
+
    if (!is_soution){
       std::string real_sol = "";
       if (sol == real_sol){
@@ -30,13 +30,12 @@ void test_sol(std::string sol, bool is_soution){
          std::cout<<"Failed \n";
       }
    }
-   
-
 }
+
+
 /*
 Test function for the graph class
 */
-
 void test(bool is_solution, std::string file_g, std::string file_q){
    graph::Query paths[2];
    graph::Graph g;
@@ -60,6 +59,7 @@ void test(bool is_solution, std::string file_g, std::string file_q){
    test_sol(sol4, is_solution);
 
 }
+
 
 int main(){
   
