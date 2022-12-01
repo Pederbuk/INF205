@@ -17,7 +17,7 @@ void test_sol(std::string sol, bool is_soution, int* tests_passed){
       std::string real_sol = "Solution: 1 --> 6";
       if (sol == real_sol){
          std::cout<<"Passed \n";
-         tests_passed++;
+         *tests_passed++;
       } else{
          std::cout<<"Failed \n";
       } 
@@ -27,7 +27,7 @@ void test_sol(std::string sol, bool is_soution, int* tests_passed){
       std::string real_sol = "";
       if (sol == real_sol){
          std::cout<<"Passed \n";
-         tests_passed ++;
+         *tests_passed ++;
       } else{
          std::cout<<"Failed \n";
       }
@@ -59,7 +59,7 @@ void test(bool is_solution, std::string file_g, std::string file_q, int* tests_p
 
    std::cout<<"Testing nodes parallel\n";
    std::string sol4 = g.check_two_queries_by_nodes_para(&paths[0],&paths[1],&std::cout);
-   test_sol(sol4, is_solution,tests_passed);
+   test_sol(sol4, is_solution, tests_passed);
 
 }
 
