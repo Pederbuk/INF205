@@ -1,3 +1,7 @@
+/*
+most of the code here is from a handout by Martin Thomas Horst, 
+the code is released under the CC BY-NC-SA 4.0 license
+ */
 #ifndef QUERY_H
 #define QUERY_H
 
