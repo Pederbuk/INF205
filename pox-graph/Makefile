@@ -1,11 +1,11 @@
-run: benchmark
-	./benchmark
+run: test
+	./test
 
-benchmark: graph.o query.o benchmark.o 
-	g++ -g3 -std=c++17 -o benchmark *.o -fopenmp
+test: graph.o query.o test.o 
+	g++ -g3 -std=c++17 -o test *.o -fopenmp
 
 %.o: %.cpp
 	g++ -g3 -c -std=c++17 -o $@ $< -fopenmp
 
 clean:
-	rm -f *.o *.zip benchmark
+	rm -f *.o *.zip test

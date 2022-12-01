@@ -332,6 +332,7 @@ void Edge::conditional_dfs_edge(Query* q, std::vector<std::string>::iterator rel
 // function that checks two queries by iterating through the edges of the graph
 std::string Graph::check_two_queries_by_edges(Query *q, Query *p, std::ostream *out)
 {
+   // queries both using the Graph::query funcion
    std::vector<std::string> q_sol = this->query(q, out);
    std::vector<std::string> p_sol = this->query(p, out);
 
@@ -478,6 +479,12 @@ std::string Graph::check_two_queries_by_nodes_para(Query* q, Query* p, std::ostr
          advance(node_it, i);
       }
    }
-
-   return "Solution: " + std::to_string(sol_from) + " --> " + std::to_string(sol_to);
+   if (foundCondition)
+   {
+      return "Solution: " + std::to_string(sol_from) + " --> " + std::to_string(sol_to);
+   } else 
+   {
+      return "";
+   }
+   
 }
