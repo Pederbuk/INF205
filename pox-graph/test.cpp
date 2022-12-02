@@ -13,6 +13,7 @@
 Test function for testing individual functions
 */ 
 void test_sol(std::string sol, bool is_soution, int* tests_passed){
+   // checks if solution is correct when there is a solution
    if (is_soution){
       std::string real_sol = "Solution: 1 --> 6";
       if (sol == real_sol){
@@ -22,15 +23,15 @@ void test_sol(std::string sol, bool is_soution, int* tests_passed){
          std::cout<<"Failed \n";
       } 
    }
-
-   if (!is_soution){
-      std::string real_sol = "";
+   // checks if solution is correct when there is no solution
+   else{
+      std::string real_sol = "No solution";
       if (sol == real_sol){
          std::cout<<"Passed \n";
          *tests_passed += 1;
       } else{
          std::cout<<"Failed \n";
-      }
+      } 
    }
 }
 
@@ -38,13 +39,14 @@ void test_sol(std::string sol, bool is_soution, int* tests_passed){
 /*
 Test function for the graph class
 */
-
 void test(bool is_solution, std::string file_g, std::string file_q, int* tests_passed){
+   // initialize graph and query
    graph::Query paths[2];
    graph::Graph g;
    read_graph(file_g, &g);
    read_query(file_q, paths);
 
+   // tests the diffrent solutions 
    std::cout<<"Testing edges: \n";
    std::string sol = g.check_two_queries_by_edges(&paths[0],&paths[1],&std::cout);
    test_sol(sol, is_solution, tests_passed);
@@ -65,14 +67,17 @@ void test(bool is_solution, std::string file_g, std::string file_q, int* tests_p
 
 
 int main(){
+   // variable for counting tests passed
    int tests_passed = 0;
-  
+   
+   // testing where there is a solution
    bool is_solution = true;
    std::string file_with_solution_g = "data/eks1.dat";
    std::string file_with_solution_q = "data/eks1_q.dat";
 
    test(is_solution, file_with_solution_g, file_with_solution_q, &tests_passed);
 
+   // testing where there is no solution
    is_solution = false;
    std::string file_with_no_solution_g = "data/eks3.dat";
    std::string file_with_no_solution_q = "data/eks3_q.dat";
