@@ -1,7 +1,8 @@
 /*
-most of the code here is from a handout by Martin Thomas Horsch, 
+the graph and query code is gotten from a handout by Martin Thomas Horsch, 
 the code is released under the CC BY-NC-SA 4.0 license
  */
+ 
 #include "query.h"
 
 using namespace graph;
