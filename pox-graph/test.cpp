@@ -26,7 +26,7 @@ void test_sol(std::string sol, bool is_soution, int* tests_passed){
    
    // checks if solution is correct when there is no solution
    else{
-      std::string real_sol = "No solution";
+      std::string real_sol = "";
       if (sol == real_sol){
          std::cout<<"Passed \n";
          *tests_passed += 1;
