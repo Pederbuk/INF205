@@ -1,12 +1,18 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
+# Graph to be visualized
 file_name = 'pox-graph/data/eks1.dat'
 
+
+# Create figure
 plt.figure("Graph")
 plt.title("Graph eks1")
 G = nx.DiGraph()
 
+
+# Read graph from file
 node_labels = {}
 edge_labels = {}
 for line in open(file_name).readlines():
@@ -19,6 +25,8 @@ for line in open(file_name).readlines():
         node_labels[line[0]] = str(line[0])
         node_labels[line[-1]] = str(line[-1])
 
+
+# Draw graph
 pos = nx.shell_layout(G)
 # pos = nx.random_layout(G)
 
